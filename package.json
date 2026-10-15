@@ -1,0 +1,30 @@
+{
+  "name": "exec-agenticdev-worskhop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend-only Vue album collection starter for an agentic development workshop",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "serve": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "@vue/tsconfig": "^0.8.1",
+    "typescript": "^5.9.2",
+    "vite": "^5.0.0",
+    "vitest": "^2.0.0",
+    "vue-tsc": "^3.0.6"
+  }
+}

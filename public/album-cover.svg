@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="cover" x2="1" y2="1">
+      <stop stop-color="#667eea"/>
+      <stop offset="1" stop-color="#764ba2"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#cover)" d="M0 0h600v600H0z"/>
+  <circle cx="300" cy="280" r="170" fill="#202039"/>
+  <circle cx="300" cy="280" r="130" fill="none" stroke="#ffffff" stroke-opacity=".15" stroke-width="3"/>
+  <circle cx="300" cy="280" r="95" fill="none" stroke="#ffffff" stroke-opacity=".15" stroke-width="3"/>
+  <circle cx="300" cy="280" r="55" fill="#b5bcff"/>
+  <circle cx="300" cy="280" r="12" fill="#202039"/>
+  <text x="300" y="510" fill="white" text-anchor="middle" font-family="sans-serif" font-size="28" letter-spacing="6">WORKSHOP SESSIONS</text>
+</svg>
