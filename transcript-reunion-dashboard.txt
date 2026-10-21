@@ -1,0 +1,117 @@
+TRANSCRIPT FICTIF - Réunion de cadrage du dashboard de ventes
+Date : 12 janvier 2026
+Objet : Passer des données brutes à un écran de pilotage pour notre boutique d'albums
+
+Participants :
+- Camille Morel, responsable commerciale
+- Thomas Garnier, responsable du réseau de magasins
+- Léa Martin, analyste données et référente produit
+
+Ce document est une mise en situation créée pour le workshop. Les personnes, la réunion et les données métier sont fictives. Les fonctionnalités évoquées sont à construire, pas déjà présentes dans l'application.
+
+[00:00] Camille :
+Merci à tous les deux. Aujourd'hui, quand je clique sur Admin login, j'arrive sur des listes de données brutes. C'est utile pour vérifier une commande, mais pas pour préparer notre réunion commerciale. Je voudrais un seul écran qui permette de comprendre comment vont les ventes, quels albums fonctionnent et comment se répartit l'activité entre Internet et les magasins.
+
+[00:35] Thomas :
+Oui, et je veux pouvoir passer de la vue globale à un magasin sans changer de page. On a dix magasins physiques et une boutique en ligne. Il faut les comparer sans donner l'impression qu'Internet est un onzième magasin physique.
+
+[01:00] Léa :
+Nous avons les commandes de janvier 2024 à décembre 2025, les lignes achetées, les albums, les clients pseudonymisés, les points de vente et les événements saisonniers. Tout est local et fictif. Nous pouvons construire ce dashboard sans ajouter de serveur ni de connexion à un outil externe.
+
+[01:25] Camille :
+Visuellement, je vois un titre "Dashboard des ventes", la période analysée et un bandeau de filtres. Juste en dessous, une rangée de grandes cartes avec les chiffres clés. Ensuite les graphiques, puis un tableau pour retrouver le détail. Gardons l'identité visuelle de la boutique, mais avec un fond clair derrière les chiffres et les graphiques.
+
+[01:55] Thomas :
+Pour les cartes, je propose le montant des ventes, le nombre de commandes, le nombre d'albums vendus et le panier moyen. Par albums vendus, j'entends bien la somme des quantités, pas le nombre de références différentes. Une commande qui contient trois exemplaires doit compter pour trois unités et une seule commande.
+
+[02:20] Léa :
+J'ajouterais une cinquième carte : les clients actifs, c'est-à-dire les clients distincts ayant acheté dans la sélection. Pour les ventes, nous prendrons les quantités multipliées par le prix unitaire enregistré dans chaque ligne de commande. Ce prix est en centimes USD ; il ne faut pas reprendre le prix actuel du catalogue. Le panier moyen sera le montant des ventes sélectionnées divisé par le nombre de commandes distinctes correspondantes.
+
+[02:55] Camille :
+D'accord. Affichons clairement USD, même si l'interface est en français. Et je préfère "Ventes brutes" à un chiffre qui pourrait être interprété comme une marge.
+
+[03:10] Léa :
+Exactement. Nous n'avons ni coûts d'achat, ni taxes, ni frais de livraison, ni remises, ni remboursements. Pas de bénéfice ou de marge calculée. Et sans données de visites, nous ne pouvons pas afficher un taux de conversion.
+
+[03:30] Camille :
+Pour la période initiale, affichons toute l'année 2025, avec tous les canaux, pour avoir une vue complète de la dernière année disponible. Je voudrais ensuite deux dates et des raccourcis "2024", "2025" et "Toute la période". Évitons un bouton "Ce mois-ci" qui donnerait un écran vide puisque les données s'arrêtent en 2025.
+
+[04:00] Thomas :
+Ajoutons un filtre de canal : tous, magasins physiques ou boutique en ligne. Puis une région et un point de vente. Pour la région, prenons celle du point de vente, pas celle du client : je cherche à mesurer l'activité de mon réseau, pas le lieu de résidence des acheteurs.
+
+[04:25] Léa :
+Oui. Les listes doivent rester cohérentes : si je sélectionne les magasins physiques, la boutique en ligne ne doit plus être proposée comme point de vente. Un choix de point de vente devenu incompatible sera retiré avec un message visible. Les filtres se cumulent et un bouton "Réinitialiser" remettra la vue sur 2025, tous canaux et sans autre sélection.
+
+[04:55] Camille :
+Il nous faut aussi un filtre de genre et une sélection d'album. Je veux pouvoir isoler un album pour voir quand et où il se vend. Dans la liste des albums, on doit pouvoir chercher par titre ou artiste sans parcourir tout le catalogue.
+
+[05:15] Thomas :
+Quand on filtre un album, que devient le panier moyen ? Une commande peut contenir d'autres albums. Il faut éviter que le dashboard me montre les ventes de tout le panier alors que j'ai demandé un seul produit.
+
+[05:35] Léa :
+Bonne remarque. Avec un filtre d'album ou de genre, seules les lignes correspondant à la sélection alimentent les montants et les quantités. Les commandes et les clients sont comptés une seule fois s'ils ont au moins une ligne correspondante. Dans ce cas, la carte s'appellera "Montant sélectionné par commande", avec une explication, plutôt que de laisser croire qu'il s'agit du panier complet. Tous les graphiques suivront cette même règle.
+
+[06:05] Camille :
+Pour le premier graphique, je voudrais une courbe des ventes dans le temps. Par mois sur une année, mais avec la possibilité de passer au jour pour examiner une courte période. Le survol doit afficher la date et le montant exact. Les périodes sans vente doivent apparaître à zéro, pas disparaître.
+
+[06:35] Thomas :
+Et pour comparer 2025 à 2024 ? Deux courbes mensuelles sur le même graphique nous permettraient de voir les différences de saisonnalité.
+
+[06:50] Léa :
+Je propose une option "Comparer 2025 à 2024", disponible quand toute l'année 2025 est sélectionnée. Elle affichera les deux années de janvier à décembre et une variation sur les cartes, avec les mêmes filtres métier appliqués aux deux années. Si la base 2024 vaut zéro, on écrira "Non calculable", pas un pourcentage infini. Sur une période personnalisée, on masquera cette comparaison pour garder une première version simple.
+
+[07:25] Camille :
+Très bien. Ensuite, je voudrais la répartition entre magasins et Internet, sous forme de barres avec les montants et la part de chaque canal. On doit voir si le poids du numérique évolue, sans avoir à interpréter des couleurs seules.
+
+[07:45] Thomas :
+À côté, un classement des magasins physiques par ventes serait utile, avec le nombre de commandes et le panier moyen dans l'infobulle ou un petit tableau associé. La boutique en ligne reste dans la comparaison des canaux, pas dans le classement des magasins. Si on filtre uniquement Internet, ce graphique peut expliquer qu'aucun magasin physique n'est sélectionné.
+
+[08:15] Léa :
+Pour les albums, je ferais un top 10 en barres horizontales, avec un choix "Ventes USD" ou "Quantités". Affichons le titre et l'artiste, et un classement trié par la mesure choisie. Un album peut être premier en volume sans l'être en montant. En cas d'égalité, on gardera un ordre stable, par titre.
+
+[08:45] Camille :
+J'aimerais aussi explorer Noël, la Saint-Valentin, l'été, Halloween et la rentrée. Est-ce que les albums associés se vendent surtout à ces moments-là ? Je voudrais choisir un événement et retrouver sa période sur la courbe.
+
+[09:05] Léa :
+On peut proposer cette exploration dans un second temps : sélectionner un événement daté, limiter l'analyse à sa fenêtre et mettre cette période en évidence sur la courbe. Il faudra distinguer les commandes passées pendant un événement des albums qui portent son thème. Un panier passé à Noël peut contenir des albums sans rapport avec Noël.
+
+[09:35] Thomas :
+Et ne concluons pas que l'événement a causé toutes les ventes. Pour comparer une période de fête au reste de l'année, regardons les unités par jour, car les durées sont différentes. Pour les nouveautés, on a aussi une date de mise en vente : une absence de vente avant cette date n'est pas une mauvaise performance.
+
+[10:00] Camille :
+Parlons recherche. Je veux retrouver une commande quand un collègue me donne son identifiant, ou retrouver les commandes d'un client avec son identifiant pseudonymisé. Pas besoin de noms ou d'adresses : on n'en a pas.
+
+[10:20] Léa :
+Sous les graphiques, ajoutons un tableau des commandes avec date, identifiant de commande, identifiant client, point de vente, canal, quantités et montant. Un champ "Rechercher dans les commandes" filtrera ce tableau par identifiant de commande, identifiant client, titre d'album ou artiste, sans tenir compte des majuscules. Cette recherche sera locale au tableau : elle ne changera ni les KPI ni les graphiques. Le libellé devra le préciser.
+
+[10:55] Thomas :
+En revanche, les filtres du haut s'appliquent bien au tableau aussi. Je veux pouvoir cliquer sur une commande pour déplier ses lignes : titre, artiste, quantité, prix unitaire historique et total de ligne. Avec un filtre produit, montrons d'abord les lignes retenues ; si on propose de voir le panier complet, distinguons-le clairement pour ne pas mélanger les montants.
+
+[11:20] Léa :
+Oui. Le tableau sera triable par date et montant, avec les commandes les plus récentes par défaut et une pagination de 25 lignes. Il indiquera le nombre de commandes trouvées. La recherche dans le tableau s'appliquera avant la pagination et reviendra à la première page quand elle change.
+
+[11:45] Camille :
+Je veux pouvoir comprendre les filtres actifs sans ouvrir chaque liste. Affichons un récapitulatif au-dessus des graphiques : période, canal, région, point de vente et sélection produit. Et si je choisis une période sans résultat, gardons les filtres, mettons les compteurs à zéro et expliquons qu'aucune vente ne correspond.
+
+[12:10] Léa :
+Pour les moyennes sans commande, affichons un tiret avec une explication plutôt qu'une division par zéro. Les dates de début et de fin seront incluses, en UTC comme dans les données. Une date de début après la date de fin déclenchera un message de validation et ne lancera pas de calcul trompeur.
+
+[12:30] Thomas :
+Et sur un petit écran ? Les cartes doivent passer sur plusieurs lignes et les filtres rester utilisables. Les graphiques ont besoin de titres, d'axes et d'unités. Les montants doivent être lisibles, pas arrondis en milliers sans possibilité de voir la valeur exacte. Je veux aussi pouvoir utiliser les filtres au clavier.
+
+[12:55] Camille :
+On garde un moyen d'accéder aux données brutes pour vérifier une valeur, et Logout pour retourner à la boutique. Il ne faut pas casser la collection d'albums déjà enregistrée dans le navigateur ni la remplacer par le catalogue de vente.
+
+[13:15] Léa :
+Je retiens une première version avec les cinq KPI, les filtres de période, canal, région, point de vente, genre et album, les quatre graphiques et le tableau avec recherche. L'exploration détaillée des événements et des lancements viendra ensuite. Nous vérifierons les calculs sur quelques commandes connues, les paniers multi-albums, les filtres combinés et les sélections vides.
+
+[13:45] Thomas :
+Pour la démonstration, je propose trois parcours : ouvrir 2025 et comparer à 2024 ; isoler un magasin puis un album ; enfin rechercher une commande et vérifier que son détail explique bien les chiffres. Ça nous dira vite si l'écran est vraiment utile.
+
+[14:05] Camille :
+Parfait. Pour la restitution, préparons ensuite cinq diapositives : le besoin métier, les indicateurs retenus, les tendances observées, la comparaison des canaux et les recommandations. Les conclusions devront venir des résultats réellement calculés, pas d'une histoire écrite à l'avance. Et chaque diapositive chiffrée précisera la période et rappellera que les données sont fictives.
+
+[14:35] Léa :
+Entendu. L'objectif est un écran simple, cohérent et vérifiable, pas une accumulation de graphiques. Si une demande nécessite une donnée absente, on le dira explicitement au lieu d'inventer un indicateur.
+
+[14:50] Fin de la réunion.
