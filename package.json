@@ -13,6 +13,8 @@
     "serve": "vite preview",
     "type-check": "vue-tsc --noEmit",
     "test": "vitest run",
+    "data:generate": "node scripts/generate-sales-data.mjs",
+    "data:check": "node scripts/generate-sales-data.mjs --check",
     "test:watch": "vitest"
   },
   "dependencies": {

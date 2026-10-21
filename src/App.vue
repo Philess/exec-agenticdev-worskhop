@@ -1,5 +1,10 @@
 <template>
-  <div class="app">
+  <nav class="app-navigation" aria-label="Main navigation">
+    <span class="app-brand">ALBUM COLLECTION</span>
+    <button @click="isAdmin = !isAdmin">{{ isAdmin ? 'Logout' : 'Admin login' }}</button>
+  </nav>
+  <AdminDataView v-if="isAdmin" />
+  <div v-else class="app">
     <header class="header">
       <h1>🎵 Album Collection</h1>
       <p>Discover amazing music albums</p>
@@ -34,10 +39,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import AlbumCard from './components/AlbumCard.vue'
+import AdminDataView from './components/AdminDataView.vue'
 import type { Album } from './types/album'
 import { loadAlbums, resetAlbums } from './services/albumStorage'
 
 const albums = ref<Album[]>([])
+const isAdmin = ref(false)
 const loading = ref<boolean>(true)
 const error = ref<string | null>(null)
 
@@ -68,6 +75,39 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.app-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 72px;
+  box-sizing: border-box;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.app-brand {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.app-navigation button {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid white;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.app-navigation button:hover { background: white; color: #764ba2; }
+.app-navigation button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+
 .app {
   min-height: 100vh;
   padding: 2rem;
