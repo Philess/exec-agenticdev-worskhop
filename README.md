@@ -1,222 +1,102 @@
-# Agentic Development Workshop Starter
+# Workshop — Du besoin métier au dashboard avec Copilot App
 
-A frontend-only album collection app for hands-on agentic development workshops.
-Adapted from the Vue frontend in [Philess/gh-copilot-demo](https://github.com/Philess/gh-copilot-demo).
-This repository intentionally contains **no backend, database server, Azure infrastructure, or API integration**.
+Vous gérez une boutique d'albums de musique. Vous disposez de deux années de données de vente, mais l'espace administrateur les affiche uniquement sous forme de données brutes.
 
-## Quick start
+**Votre mission :** utiliser GitHub Copilot dans Copilot App pour transformer ces données en un dashboard utile, puis préparer une présentation PowerPoint de vos analyses.
 
-Install [Node.js 22 or newer](https://nodejs.org/) (npm is included), then:
+## Avant de commencer
 
-```sh
-git clone https://github.com/Philess/exec-agenticdev-worskhop.git
-cd exec-agenticdev-worskhop
-npm ci
-npm run dev
-```
+- Disposer de Copilot App, avec GitHub Copilot connecté et utilisable.
+- Installer [Node.js 22 ou supérieur](https://nodejs.org/) ; npm est inclus.
+- Récupérer ce dépôt et ouvrir son dossier dans Copilot App.
+- Ouvrir le [transcript de réunion fictif](transcript-reunion-dashboard.txt) inclus dans le dépôt.
 
-Open the local URL printed by Vite (normally **http://localhost:3001**).
-No environment variables, credentials, .NET SDK, or cloud resources are needed.
-Package installation needs internet access; the running app and its bundled cover image do not.
+L'application fonctionne en local, sans backend ni service cloud. Les données sont fictives et les visuels sont inclus dans le projet. Une connexion Internet est nécessaire pour installer les dépendances et utiliser Copilot.
 
-## What is included
+## Découverte — Lancer l'application avec un prompt
 
-- Vue 3 Composition API, TypeScript, and Vite.
-- The original responsive album grid and cards.
-- Six fictional sample albums, automatically initialized on the first visit.
-- Browser localStorage persistence, validation, and explicit storage error messages.
-- A confirmed **Reset demo data** action to restore the initial collection.
-- The shop as the default page, with an **Admin login / Logout** simulation.
-- A single read-only admin page showing raw fictional sales data, ready for the lab.
-- Storage and dataset unit tests and a GitHub Actions check for tests and production builds.
+Dans Copilot App, demandez simplement :
 
-**Add to Cart** and **Preview** are deliberately disabled workshop placeholders.
-There is no checkout, payment processing, audio playback, or album editor yet.
-Prices are illustrative USD amounts; this is not a production store.
+> Lance cette application en local. Installe les dépendances si nécessaire, démarre le serveur de développement et donne-moi l'adresse à ouvrir dans mon navigateur.
 
-## Commands
+Ouvrez l'adresse indiquée, normalement **http://localhost:3001**, puis :
 
-| Command | Purpose |
-| --- | --- |
-| `npm ci` | Install the exact dependencies from the lockfile |
-| `npm run dev` | Start the frontend development server |
-| `npm test` | Run the storage and dataset unit tests once |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run data:generate` | Rebuild the fictional two-year sales JSON with a fixed random seed |
-| `npm run data:check` | Check that the committed sales JSON matches the generator |
-| `npm run type-check` | Check Vue and TypeScript types |
-| `npm run build` | Type-check and create the static production build in `dist` |
-| `npm run preview` | Serve the production build locally after building |
+1. Parcourez la boutique et ses albums.
+2. Cliquez sur **Admin login** pour ouvrir l'espace administrateur.
+3. Explorez les collections avec **Data collection** et les boutons **Previous / Next**.
 
-Deploy `dist` to any static web host. Serve the app over HTTP(S), not by opening
-`index.html` as a file. The default build targets the root of a site; for a subpath,
-build with `npm run build -- --base=/your-subpath/`.
+Vous pouvez consulter les albums, les magasins et la boutique en ligne, les clients fictifs, les événements saisonniers et les commandes. Le jeu de données couvre **2024 et 2025** : 30 albums, 10 magasins physiques, une boutique en ligne, 600 clients et 9 937 commandes.
 
-## How data works
+Le mode administrateur est une simulation : aucun identifiant n'est demandé. **Logout** permet de revenir à la boutique.
 
-`src/data/albums.ts` defines the seed collection. On first load,
-`src/services/albumStorage.ts` writes it to the localStorage key
-`exec-agenticdev-workshop.albums.v1`. Subsequent loads read the saved collection
-instead of overwriting it, including when it is intentionally empty.
+*Capture à ajouter : l'application et les données brutes en mode administrateur.*
 
-The stored JSON has this shape:
+## Étape 1 — Construire votre dashboard de ventes
 
-```json
-{
-  "version": 1,
-  "albums": [
-    {
-      "id": 1,
-      "title": "Midnight Signals",
-      "artist": "The Northern Lights",
-      "price": 12.99,
-      "image_url": "/album-cover.svg"
-    }
-  ]
-}
-```
+### Partir du besoin métier
 
-Album IDs must be unique positive safe integers; titles, artists, and image URLs
-must be nonempty strings; prices must be finite nonnegative numbers.
-`loadAlbums`, `saveAlbums`, and `resetAlbums` are the persistence entry points
-to reuse when implementing workshop features. A future editor should save successfully
-before updating displayed state, and surface save failures to the user.
+Le [transcript de réunion fictif](transcript-reunion-dashboard.txt) contient le contexte et les attentes métier. **Il remplace l'accès à Work IQ pour cet exercice.** Référencez ce fichier dans votre conversation dans Copilot App ou joignez-le.
 
-Data belongs to this browser profile and origin (scheme, hostname, and port).
-Development and preview servers use different ports and therefore different collections.
-It is not shared across users or devices. Clearing site data removes it; private browsing
-may discard it on exit, and browser settings can block writes. Do not store secrets or
-personal data here. Cross-tab live synchronization is not implemented.
+Commencez, par exemple, avec ce prompt, **en mode plan**, en référençant le fichier fourni :
 
-Use **Reset demo data** and confirm to restore the samples. This replaces only the
-app's collection key, not other localStorage data. Invalid JSON or unsupported data
-is reported without being silently overwritten; reset is the explicit recovery path.
-If browser storage is blocked or full, allow it or free space before retrying.
-Changes to seed data take effect for existing users only after a reset.
+> Lis le transcript de réunion joint et explore les données de vente du projet. Résume les besoins métier, identifie les indicateurs que les données permettent de calculer et propose une première version simple du dashboard. Signale les demandes auxquelles les données ne permettent pas de répondre. Ne modifie pas encore le code.
 
-## Admin mode: the workshop starting point
+Réponsez aux questions, et prenez le temps de revoir et ajuster le plan. Puis demandez à Copilot de passer à l'action :
 
-The app opens on the shop. Click **Admin login** to simulate an admin connection:
-the shop is replaced by a single **Workshop data** page. **Logout** returns to
-the shop. The mode lives only in memory; refreshing starts on the shop again.
-There are no credentials, sessions, backend, or real access controls. The bundled
-fictional dataset is public; this toggle must never be treated as authentication.
+> Implémente ce dashboard dans l'espace administrateur, en t'appuyant sur les besoins du transcript et les données existantes. Garde l'application en Vue 3 / TypeScript, entièrement frontend et locale, et préserve la boutique. Vérifie les calculs, puis exécute les tests et le build.
 
-The admin page deliberately contains no dashboard, charts, KPIs, customer insights,
-or management actions. Its banner, typography, purple-blue background and light
-data panel follow the shop's existing theme. Select metadata, albums, stores and the online shop,
-customers, seasonal events, or orders to inspect their raw JSON. Collections are
-paged in batches of 25 records so every record is accessible without rendering
-thousands of orders at once. Switching collections starts on the first page.
-Building the seller dashboard and its analytics is the workshop task, not a
-prebuilt feature of this starter.
+### Explorer et améliorer
 
-**This is a read-only demo, not live commerce analytics or an authenticated seller
-portal.** `src/data/sales.ts` loads `src/data/sales.json`: deterministic fictional
-completed orders for January 1, 2024 through December 31, 2025 (731 days including
-leap day), ten fictional physical stores, one online shop, and 600 pseudonymous
-listeners. No external services, tracking, personal data, or
-analytics localStorage keys are used. Sales keep historical album title/artist
-and price snapshots based on the `Album` contract; they are deliberately independent
-of edits, removals, or resets of the browser's saved album collection.
+Testez le résultat dans le navigateur et faites évoluer votre dashboard avec vos propres prompts. Quelques pistes, à adapter au transcript :
 
-### Two-year sales JSON
+- Suivre les ventes, le nombre de commandes et le panier moyen.
+- Comparer les magasins physiques et la boutique en ligne.
+- Identifier les albums les plus vendus et l'évolution mensuelle des ventes.
+- Explorer la saisonnalité et les lancements d'albums.
+- Filtrer les résultats par période, canal ou magasin.
 
-`src/data/sales.json` is the checked-in, standalone dataset for offline analysis.
-It contains 9,937 completed orders and 30 fictional albums: 22 already on sale
-at the beginning of 2024, and four launches in each of 2024 and 2025. The first
-six album IDs match the storefront samples; the additional historical catalog
-does not replace or modify the browser's saved collection.
+**Vérifiez les chiffres, pas seulement le rendu.** Les montants des lignes de commande sont en centimes USD : les ventes se calculent avec la quantité multipliée par le prix unitaire historique. Les données ne permettent pas de calculer une marge et une corrélation saisonnière ne prouve pas une causalité.
 
-| JSON collection | Key fields and joins |
-| --- | --- |
-| `metadata` | Inclusive date bounds, USD currency, UTC dates, fixed seed, model assumptions and limitations |
-| `albums` | `id`, title, artist, price in dollars, local cover, genre, seasonal `tags`, `releaseDate`, `saleStartDate` |
-| `locations` | `id`, name, `channel` (`store` or `online`), fictional region, `openedOn` |
-| `customers` | Pseudonymous `id`, region, `homeStoreId` -> location, `joinedOn`, preferred genre and channel |
-| `events` | `id`, name, inclusive dates, matching `albumTag`, synthetic demand multiplier |
-| `orders` | Unique `id`, UTC date, `customerId`, `locationId`, calendar `eventIds`, and item `lines` |
-| `orders[].lines` | Historical product ID/title/artist, positive integer quantity and integer USD `unitPriceCents`; product ID joins to `albums.id` |
+**Résultat attendu :** un dashboard fonctionnel qui répond aux principales questions de la réunion, avec des chiffres vérifiés et quelques enseignements que vous pouvez expliquer.
 
-Release dates and first on-sale dates are distinct. No order predates an album's
-on-sale date, a customer's joining date, or a store's opening date. Customers can
-return, buy across channels and visit stores outside their home region; baskets
-can include several albums. Preferred genres/channels and home stores influence,
-but do not dictate, simulated purchasing.
 
-Seasonality repeats in both years, with nonzero off-season demand:
 
-| Album tag | Inclusive annual peak window | Modeled demand multiplier |
-| --- | --- | --- |
-| `christmas` | November 1 - December 31, after Halloween | 16x |
-| `love` | February 1 - February 14, Valentine's gifting | 12x |
-| `summer` | June 1 - August 31 | 3.5x |
-| `halloween` | October 1 - October 31 | 9x |
-| `study` | August 15 - September 30, back to school | 5x |
+## Étape 2 — Générer une présentation PowerPoint
 
-For example, **Everything I Wish for Christmas** by **Holly Lanterns** is a
-fictional holiday-pop title, not a real artist's recording. Compare daily units
-for established albums during and outside their tagged event windows, then
-group by year, channel, store, or customer cohort. Normalize by days in each
-window rather than comparing raw totals for unequal periods. Launches have a
-28-day boost; weekends, second-year growth, and a gradual year-to-year online
-mix change add other modeled effects. Random variation and mixed baskets mean
-observed sales ratios will not equal the input multipliers.
+Vous allez maintenant utiliser le skill PowerPoint **`pptx` d'Anthropic** pour présenter vos résultats.
 
-Event IDs label the calendar window for an order, **not its proven cause**.
-These are deliberately designed correlations in synthetic data, not evidence of
-real purchasing behavior. The generator uses the largest matching seasonal
-multiplier for overlapping album tags. Tests measure seasonal unit-sales lifts
-in each year and channel, as well as references, dates, launches and totals.
-Run `npm run data:generate` after editing `scripts/generate-sales-data.mjs`, then
-`npm run data:check`, `npm test`, and `npm run build`. The generator has no external
-dependencies and reproduces the same JSON byte-for-byte.
+### Installer le skill dans Copilot App
 
-Suggested metric definitions for the dashboard exercise (not implemented):
+1. Ouvrez la section Customize dans Copilot App. C'est ici que vous pourrez installer, et activer les skills, MCP Servers, plugins et autres extensions pour Copilot.
+![Copilot app customize section](assets/001-customize.png)
+2. Dans les apps installées, recherchez la section des plugins et cliquez sur `Add Plugin` puis `Manage Markeplace`.
+![Add a marketplace](assets/002-add-marketplace.png)
+Un marketplace est un catalogue permettant de distribuer des plugins et des skills pour Copilot. Vous pouvez construire vos propres catalogues d'entreprise ou utiliser ceux proposés par la communauté.
+3. Nous allons ajouter le marketplace **Anthropics Skills** proposé par Anthropic.
+Dans le champ **Source** saisissez la valeur `anthropics/skills` et cliquez sur **Add**
+![add anthropics skills marketplace](assets/003-anthropic-repo.png)
+4. De retour sur l'écran des plugins, recherchez le skill qui nous intéresse: **`document-skills`**, puis installez-le.
+![browse plugins](assets/004-browse-plugins.png)
+![add document plugin](assets/005-add-document-plugin.png)
 
-- Gross product sales sum quantity times recorded unit price, using integer USD
-  cents. Taxes, shipping, discounts, and refunds are not modeled.
-- Average order value is selected product sales divided by selected orders.
-  Multi-product orders count once overall and once for each product they contain.
-- Active customers are unique purchasers in the selection. Returning customers
-  have a purchase before the selected start date anywhere in the available demo
-  history, including channels outside the selection. "New" is relative to this
-  limited history, not proof of a first-ever purchase.
-- Purchase frequency groups use 1, 2, or 3+ selected orders. Channel preference
-  compares selected online/store order counts; a tie is labeled "Both channels".
-  Filtering to one channel necessarily changes this result.
-- All dates are inclusive UTC calendar dates. When building daily charts, include
-  zero-sales days. Round percentages for display; do not infer real-world growth,
-  profit, or lifetime-value claims from this synthetic dataset.
 
-## Code map
+### Préparer votre restitution
 
-```text
-src/
-  App.vue                        Shop, simulated admin toggle, storage and reset
-  main.ts                        Vue entry point
-  components/AlbumCard.vue       Album presentation and exercise placeholders
-  components/AdminDataView.vue   Plain, paginated raw JSON inspection
-  data/albums.ts                 Fresh sample collection factory
-  data/sales.ts                  Typed, independent copies of the sales fixture
-  data/sales.json                Two-year detailed sales, catalog and dimensions
-  data/sales.test.ts             Integrity, launch dates and seasonal-lift checks
-  services/albumStorage.ts       Validated localStorage reads and writes
-  services/albumStorage.test.ts  Seeding, persistence, reset, and failure tests
-  types/album.ts                 Shared Album interface
-  types/sales.ts                 Sales dataset, location and customer contracts
-public/album-cover.svg           Bundled cover and fallback image
-scripts/generate-sales-data.mjs  Seeded, reproducible sales JSON generator
-.github/workflows/ci.yml         Automated tests and build
-```
+Dans Copilot App, demandez par exemple :
 
-## Suggested workshop exercises
+> Utilise le skill pptx d'Anthropic pour créer un document PowerPoint de 5 diapositives pour faire une présentation exécutive des nouvelles fonctionnalités. Utilise le transcript et les données des sessions copilot sur ce projet. Les 4 premiers slides doivent couvrir le contexte, les objectifs, les nouvelles fonctionnalités et les impacts attendus et le dernier slide doit doit être un rapport visuel du cout, des sessions, des modèles et de la consommation de tokens des sessions qui ont été nécessaires. Utilise le MCP Playwright pour ajouter des captures d'écran. Enregistre le fichier .pptx dans le projet et indique son emplacement.
 
-1. Inspect the raw data in admin mode and identify the relationships between orders, albums, customers, stores and events.
-2. Build the seller dashboard: date and channel filters, revenue, units, order counts and product rankings.
-3. Add physical-store versus online comparisons and customer management views.
-4. Explore seasonal patterns and album launches across the two years, with tests for your calculations.
+Ouvrez le fichier généré, vérifiez le contenu et la lisibilité des diapositives, puis demandez les ajustements nécessaires à Copilot.
 
-Ask your coding agent to inspect the relevant components, propose a small change,
-implement it, and verify its behavior. Keep changes frontend-only and cover storage
-edge cases as the app grows.
+**Résultat attendu :** une présentation PowerPoint courte et exploitable pour restituer vos conclusions.
+
+
+## Repères utiles
+
+- [Données de vente](src/data/sales.json) et [contrats TypeScript](src/types/sales.ts).
+- [Vue administrateur à faire évoluer](src/components/AdminDataView.vue).
+- [Service de persistance des albums](src/services/albumStorage.ts) et [contrat Album](src/types/album.ts) à réutiliser si nécessaire. Préservez les données localStorage existantes et affichez explicitement les erreurs de lecture, de validation ou d'écriture.
+
+Pour un lancement manuel : `npm ci`, puis `npm run dev`. Après vos modifications : `npm test` et `npm run build`.
+
+Application adaptée du frontend Vue de [Philess/gh-copilot-demo](https://github.com/Philess/gh-copilot-demo).
