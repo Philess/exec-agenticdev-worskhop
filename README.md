@@ -37,7 +37,7 @@ Le mode administrateur est une simulation : aucun identifiant n'est demandé. **
 
 Le [transcript de réunion fictif](transcript-reunion-dashboard.txt) contient le contexte et les attentes métier. **Il remplace l'accès à Work IQ pour cet exercice.** Référencez ce fichier dans votre conversation dans Copilot App ou joignez-le.
 
-Commencez, par exemple, avec ce prompt, **en mode plan**, en référençant le fichier fourni :
+Commencez, par exemple, avec ce prompt, ⚠️ **en mode plan  ⚠️** , en référençant le fichier fourni :
 
 > Lis le transcript de réunion joint et explore les données de vente du projet. Résume les besoins métier, identifie les indicateurs que les données permettent de calculer et propose une première version simple du dashboard. Signale les demandes auxquelles les données ne permettent pas de répondre. Ne modifie pas encore le code.
 
@@ -86,7 +86,7 @@ Dans le champ **Source** saisissez la valeur `anthropics/skills` et cliquez sur 
 
 Dans Copilot App, demandez par exemple :
 
-> Utilise le skill pptx d'Anthropic pour créer un document PowerPoint de 5 diapositives pour faire une présentation exécutive des nouvelles fonctionnalités. Utilise le transcript et les données des sessions copilot sur ce projet. Les 4 premiers slides doivent couvrir le contexte, les objectifs, les nouvelles fonctionnalités et les impacts attendus et le dernier slide doit doit être un rapport visuel du cout, des sessions, des modèles et de la consommation de tokens des sessions qui ont été nécessaires. Utilise le MCP Playwright pour ajouter des captures d'écran. Enregistre le fichier .pptx dans le projet et indique son emplacement.
+> Utilise le skill pptx d'Anthropic pour créer un document PowerPoint de 4 diapositives pour faire une présentation exécutive des nouvelles fonctionnalités. Utilise le transcript et les données des sessions copilot sur ce projet. Les slides doivent couvrir le contexte, les objectifs, les nouvelles fonctionnalités et les impacts attendus. Ajouter des captures d'écran. Enregistre le fichier .pptx dans le projet et indique son emplacement.
 
 Ouvrez le fichier généré, vérifiez le contenu et la lisibilité des diapositives, puis demandez les ajustements nécessaires à Copilot.
 
