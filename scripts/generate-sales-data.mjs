@@ -188,8 +188,8 @@ const dataset = {
 const { orders: rows, ...dimensions } = dataset
 const json = `${JSON.stringify(dimensions, null, 2).slice(0, -2)},\n  "orders": [\n${rows.map(order => `    ${JSON.stringify(order)}`).join(',\n')}\n  ]\n}\n`
 if (process.argv.includes('--check')) {
-  if (readFileSync(target, 'utf8') !== json) {
-    throw new Error('Sales fixture is out of date. Run npm run data:generate.')
+  if (readFileSync(target, 'utf8').replace(/\r\n/g, '\n') !== json) {
+    throw new Error('Sales fixture is out of date. Run bun run data:generate.')
   }
 } else {
   writeFileSync(target, json)

@@ -4,18 +4,19 @@
   "private": true,
   "description": "Frontend-only Vue album collection starter for an agentic development workshop",
   "engines": {
-    "node": ">=22"
+    "bun": ">=1.4.4"
   },
+  "packageManager": "bun@1.4.4",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
-    "serve": "vite preview",
-    "type-check": "vue-tsc --noEmit",
-    "test": "vitest run",
-    "data:generate": "node scripts/generate-sales-data.mjs",
-    "data:check": "node scripts/generate-sales-data.mjs --check",
-    "test:watch": "vitest"
+    "dev": "bun --bun vite",
+    "build": "bun --bun vue-tsc && bun --bun vite build",
+    "preview": "bun --bun vite preview",
+    "serve": "bun --bun vite preview",
+    "type-check": "bun --bun vue-tsc --noEmit",
+    "test": "bun --bun vitest run",
+    "data:generate": "bun scripts/generate-sales-data.mjs",
+    "data:check": "bun scripts/generate-sales-data.mjs --check",
+    "test:watch": "bun --bun vitest"
   },
   "dependencies": {
     "vue": "^3.4.0"
