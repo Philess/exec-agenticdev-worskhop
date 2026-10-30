@@ -7,7 +7,7 @@ Vous gérez une boutique d'albums de musique. Vous disposez de deux années de d
 ## Avant de commencer
 
 - Disposer de Copilot App, avec GitHub Copilot connecté et utilisable.
-- Installer [Node.js 22 ou supérieur](https://nodejs.org/) ; npm est inclus.
+- Installer [Bun 1.4.4](https://bun.com/docs/installation) (version utilisée pour le workshop), puis redémarrer Copilot App si nécessaire pour rendre la commande `bun` disponible. Node.js et npm ne sont pas nécessaires pour cette application.
 - Récupérer ce dépôt et ouvrir son dossier dans Copilot App.
 - Ouvrir le [transcript de réunion fictif](transcript-reunion-dashboard.txt) inclus dans le dépôt.
 
@@ -17,7 +17,7 @@ L'application fonctionne en local, sans backend ni service cloud. Les données s
 
 Dans Copilot App, demandez simplement :
 
-> Lance cette application en local. Installe les dépendances si nécessaire, démarre le serveur de développement et donne-moi l'adresse à ouvrir dans mon navigateur.
+> Lance cette application en local avec Bun, sans Node.js ni npm. Installe les dépendances avec `bun install --frozen-lockfile` si nécessaire, démarre le serveur avec `bun run dev` et donne-moi l'adresse à ouvrir dans mon navigateur.
 
 Ouvrez l'adresse indiquée, normalement **http://localhost:3001**, puis :
 
@@ -65,6 +65,8 @@ Testez le résultat dans le navigateur et faites évoluer votre dashboard avec v
 
 Vous allez maintenant utiliser le skill PowerPoint **`pptx` d'Anthropic** pour présenter vos résultats.
 
+Le skill peut nécessiter des outils supplémentaires selon son mode d'exécution. L'absence de prérequis Node.js concerne l'application Vue, pas nécessairement les outils de génération PowerPoint.
+
 ### Installer le skill dans Copilot App
 
 1. Ouvrez la section Customize dans Copilot App. C'est ici que vous pourrez installer, et activer les skills, MCP Servers, plugins et autres extensions pour Copilot.
@@ -97,6 +99,15 @@ Ouvrez le fichier généré, vérifiez le contenu et la lisibilité des diaposit
 - [Vue administrateur à faire évoluer](src/components/AdminDataView.vue).
 - [Service de persistance des albums](src/services/albumStorage.ts) et [contrat Album](src/types/album.ts) à réutiliser si nécessaire. Préservez les données localStorage existantes et affichez explicitement les erreurs de lecture, de validation ou d'écriture.
 
-Pour un lancement manuel : `npm ci`, puis `npm run dev`. Après vos modifications : `npm test` et `npm run build`.
+Pour un lancement manuel :
+
+```shell
+bun install --frozen-lockfile
+bun run dev
+```
+
+Après vos modifications : `bun run test` et `bun run build`. Pour vérifier les types uniquement : `bun run type-check`. Pour vérifier le jeu de données : `bun run data:check` ; pour le régénérer : `bun run data:generate`.
+
+Les tests utilisent Vitest : utilisez **`bun run test`**, pas `bun test` (qui lance le test runner intégré de Bun). Les scripts imposent le runtime Bun aux outils pour éviter une dépendance implicite à Node.js. Le fichier `bun.lock` versionné fixe les dépendances ; utilisez `bun install --frozen-lockfile` pour le respecter.
 
 Application adaptée du frontend Vue de [Philess/gh-copilot-demo](https://github.com/Philess/gh-copilot-demo).
